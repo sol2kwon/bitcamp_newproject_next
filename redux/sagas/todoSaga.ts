@@ -1,38 +1,65 @@
 import { call, delay, put, takeLatest} from 'redux-saga/effects'
-import { addTodo,getTodo,modifyTodo,removeTodo } from '../api/todoApi.ts'
+import { addTodoApi } from '../api/todoApi.ts'
 import { todoActions } from '../../redux/reducers/todoReducer.ts';
 interface TodoType{
     type: string;
     payload: {
-        userid: string, task: string, completed: string
+        task: String
     }
 }
 interface TodoSuccessType{
     type: string;
     payload: {
-        userid: string
+        task: string
     }
 }
 function* addTodo(todo: TodoType){
     try{
-        alert('진행 3: Saga 내부 진입 성공' + JSON.stringify(todo))
-        const response: TodoSuccessType = yield addTodo(todo.payload)
+        alert('사가내부진입')
+        const response: TodoSuccessType = yield addTodoApi(todo.payload)
         yield put(todoActions.taskSuccess(response))
        
     }catch(error){
-        alert('진행 3: Saga 내부 진입 실패')
+        yield put(todoActions.taskFailure(error))
+        alert('사가내부진입실패')
+    }
+}
+function* getTodos(todo: TodoType){
+    try{
+        const response: TodoSuccessType = yield addTodoApi(todo.payload)
+        yield put(todoActions.taskSuccess(response))
+       
+    }catch(error){
         yield put(todoActions.taskFailure(error))
     }
 }
-export function* watchTodo(){
-    yield takeLatest(todoActions.taskRequest, addTodo)
+function* modifyTodo(todo: TodoType){
+    try{
+        const response: TodoSuccessType = yield addTodoApi(todo.payload)
+        yield put(todoActions.taskSuccess(response))
+    }catch(error){
+        yield put(todoActions.taskFailure(error))
+    }
 }
-export function* watchTodo(){
-    yield takeLatest(todoActions.taskRequest, getTodo)
+function* removeTodo(todo: TodoType){
+    try{
+        const response: TodoSuccessType = yield addTodoApi(todo.payload)
+        yield put(todoActions.taskSuccess(response))
+       
+    }catch(error){
+        yield put(todoActions.taskFailure(error))
+    }
 }
-export function* watchTodo(){
-    yield takeLatest(todoActions.taskRequest, modifyTodo)
+export function* watchAddTodo(){
+    yield takeLatest(todoActions.addTodoRequest, addTodo)
 }
-export function* watchTodo(){
-    yield takeLatest(todoActions.taskRequest, removeTodo)
+export function* watchGetTodos(){
+    yield takeLatest(todoActions.getTodosRequest, getTodos)
 }
+export function* watchModifyTodo(){
+    yield takeLatest(todoActions.modifyTodoRequest, modifyTodo)
+}
+export function* watchRemoveTodo(){
+    yield takeLatest(todoActions.removeTodoRequest, removeTodo)
+}
+

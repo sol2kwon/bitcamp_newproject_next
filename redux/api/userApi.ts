@@ -1,96 +1,64 @@
-import { createSlice , PayloadAction} from "@reduxjs/toolkit"
+import axios, {AxiosResponse} from 'axios'
 
-export interface UserType{
+const SERVER = 'http://127.0.0.1:5000'
+const headers = {
+    "Content-Type": "application/json",
+    Authorization: "JWT fefege..."
+}
+export interface UserType {
     userid: string;
-    password: string;  
+    password: string;
     email: string;
-    name: string;  
+    name: string;
     phone: string;
     birth: string;
     address: string;
 }
-
-export interface UserState{
-    loading: boolean;
-    data: UserType[];
-    loginUser: any;
-    error: any;
-}
-
-
-const initialState: UserState = {
-    loading: false,
-    data: [],
-    loginUser: {
-        userid: '',
-        password: '',  
-        email: '',
-        name: '',  
-        phone: '',
-        birth: '',
-        address: ''
-    },
-    error: null
-}
-export interface LoginSuccessType {
-    data: {
-      token: string
+export const joinApi = async (payload : {
+    userid: string,
+    password: string,
+    email: string,
+    name: string,
+    phone: string,
+    birth: string,
+    address: string
+}) => {
+    try {
+        const response: AxiosResponse<unknown, UserType[]> = await axios.post(
+            `${SERVER}/user/join`,
+            payload,
+            {headers}
+        )
+        return response.data
+    } catch (err) {
+        return err;
     }
-   
-    config: {
-      data: {
-        userid: string;
-        name: string;
-        email: string;
-        phone: string;
-        address: string;
-        password: string;
-        birth: string;
-      }
-  
+}
+export const loginApi = async (payload : {
+    userid: string,
+    password: string
+}) => {
+    try {
+        const response: AxiosResponse<unknown, UserType[]> = await axios.post(
+            `${SERVER}/user/login`,
+            payload,
+            {headers}
+        )
+        const loginUser = JSON.stringify(response.data)
+        localStorage.setItem("loginUser", loginUser)
+        return response.data
+    } catch (err) {
+        return err;
     }
-  }
-const userSlice = createSlice({
-    name: 'users',
-    initialState,
-    reducers: {
-        joinRequest(state: UserState, payload){
-            state.loading = true; 
-        },
-        joinSuccess(state: UserState, {payload}){ 
-            state.data = [...state.data, payload]
-            state.loading = false;
-            
-        },
-        joinFailure(state: UserState, {payload}){ 
-            state.data = payload;
-            state.loading = false;
-        },
-        loginRequest(state: UserState, payload){
-            state.loading = true; 
-        },
-        loginSuccess(state: UserState, action: PayloadAction<LoginSuccessType>){ 
-            state.loginUser = action.payload['user']
-            state.loading = false;
-            
-        },
-        loginFailure(state: UserState, {payload}){ 
-            state.data = payload;
-            state.loading = false;
-            window.location.href = '/user/login'
-        },
-        logoutRequest(state: UserState, payload){
-            state.loading = false; 
-        },
-        logoutSuccess(state: UserState){ 
-            state.loading = false;
-            localStorage.clear()
-            window.location.href = '/'
-        },
+}
+export const logoutApi = async () => {
+    try {
+        const response: AxiosResponse<unknown, UserType[]> = await axios.get(
+            `${SERVER}/user/logout`,
+            {headers}
+        )
         
+    } catch (err) {
+        return err;
     }
-})
-const { reducer, actions } = userSlice
-export const userActions = actions
-
-export default reducer
+}

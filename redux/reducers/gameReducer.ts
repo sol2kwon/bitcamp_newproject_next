@@ -1,9 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-const initialState={}
+import { createSlice } from "@reduxjs/toolkit"
+const initialState = {}
 export const gameSlice = createSlice({
     name: 'games',
     initialState,
-    reducers:{}
+    reducers: {}
 })
 export default gameSlice.reducer
