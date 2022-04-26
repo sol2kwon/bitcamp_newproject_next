@@ -1,6 +1,6 @@
 import { call, delay, put, takeLatest} from 'redux-saga/effects'
 import { addTodoApi } from '../api/todoApi.ts'
-import { todoActions } from '../../redux/reducers/todoReducer.ts';
+import { todoActions } from '../reducers/todoReducer.ts';
 interface TodoType{
     type: string;
     payload: {

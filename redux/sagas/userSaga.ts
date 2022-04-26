@@ -1,5 +1,5 @@
 import { call, delay, put, takeLatest } from 'redux-saga/effects'
-import { userActions } from '../../redux/reducers/userReducer.ts';
+import { userActions } from '../reducers/userReducer.ts';
 import { joinApi, loginApi, logoutApi } from '../api/userApi.ts'
 
 interface UserJoinType{
