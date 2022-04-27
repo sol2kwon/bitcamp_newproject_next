@@ -25,18 +25,8 @@ function Copyright(props) {
       </Typography>
     );
   }
-  
   const theme = createTheme();
-  
-  export default function SignIn() {
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-      });
-    };
+  const UserLogin = ({onSubmit, onChange, form}) => {
   
     return (
       <ThemeProvider theme={theme}>
@@ -56,16 +46,19 @@ function Copyright(props) {
             <Typography component="h1" variant="h5">
               로그인
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <form onSubmit={onSubmit} >
+            <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="userid"
                 label="사용자ID"
-                name="email"
-                autoComplete="email"
+                name="userid"
+                autoComplete="userid"
+                onChange={onChange}
                 autoFocus
+                value={form.userid}
               />
               <TextField
                 margin="normal"
@@ -76,6 +69,8 @@ function Copyright(props) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={onChange}
+                value={form.password}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -102,9 +97,11 @@ function Copyright(props) {
                 </Grid>
               </Grid>
             </Box>
+            </form>
           </Box>
           <Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>
       </ThemeProvider>
     );
   }
+  export default UserLogin
